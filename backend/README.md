@@ -92,7 +92,7 @@ GET '/categories'
 
 `````````
 GET '/questions?page=1'
- -Fetches all Questions and questions,
+- Fetches all Questions and questions,
   including pagination (every 10 questions). and return a list of questions,
   number of total questions, current category, categories.
   pairs.
