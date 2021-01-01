@@ -78,25 +78,22 @@ def create_app(test_config=None):
   def get_questions():
     selection = Question.query.order_by(Question.id).all()
     total_questions = len(selection)
-    current_questions = paginate_questions(request, selection)
+    questions = paginate_questions(request, selection)
      
-    # get all categories and add to dict
-    categories = Category.query.all()
-    categories_dict = {}
-    for category in categories:
-       categories_dict[category.id] = category.type
-
-      # abort 404 if no questions
-    if (len(current_questions) == 0):
+    if (len(questions) == 0):
       abort(404)
-    
-    
-    # return data to view
+
+    categories = Category.query.all()
+    listCategories = {}
+    for c in categories: 
+       listCategories[c.id] = c.type
+
+      
     return jsonify({
       'success': True,
-      'questions': current_questions,
+      'questions':  questions,
       'total_questions': total_questions,
-      'categories': categories_dict,
+      'categories': listCategories ,#[category.format() for category in categories],
       #'current_category': current_category
     })
 
@@ -211,17 +208,20 @@ def create_app(test_config=None):
   '''
   @app.route('/categories/<int:id>/questions',methods=['GET'])
   def get_questions_by_category(id):
-    category = Category.query.filter_by(id =id).one_or_none()
+
+    category = Category.query.get(id) 
     print( category)
+    
     if category is None:
       abort(400)
+
     selection = Question.query.filter_by(category=str(category.id)).all()
     # paginate the selection
-    paginated = paginate_questions(request, selection)
+    paginated_question = paginate_questions(request, selection)
     # return the results
     return jsonify({
             'success': True,
-            'questions': paginated,
+            'questions': paginated_question,
             'total_questions': len(Question.query.all()),
             'current_category': category.type
     })
@@ -239,50 +239,48 @@ def create_app(test_config=None):
   and shown whether they were correct or not. 
   '''
   @app.route('/quizzes', methods=['POST'])
-  def get_random_quiz_question():
-    body =request.get_json()
-     # get the previous questions
-    previous = body.get('previous_questions')
-    # get the category
-    category = body.get('quiz_category')
-    if ((category is None) or (previous is None)):
-         abort(400)
-    # load questions all questions if "ALL" is selected
-    if (category['id'] == 0):
-        questions = Question.query.all()
-        # load questions for given category
-    else:
-        questions = Question.query.filter_by(category=category['id']).all()
-        # get total number of questions
-    total = len(questions)
-    # picks a random question
-    def get_random_question():
-      return questions[random.randrange(0, len(questions), 1)]
-    
-    # checks to see if question has already been used
-    def check_if_used(question):
-      used = False
-      for q in previous:
-        if (q == question.id):
-          used = True
-          return used
+  def get_random_quiz_question_play():
 
-    # get random question
-    question = get_random_question()
-     # check if used, execute until unused question found
-    while (check_if_used(question)):
-      question = get_random_question()
-      # if all questions have been tried, return without question
-      # necessary if category has <5 questions
-      if (len(previous) == total):
+    body =request.get_json()
+    previous_questions = body.get('previous_questions')
+    quiz_category = body.get('quiz_category')
+
+    if ((previous_questions is None) or ( quiz_category is None)):
+         abort(400)
+   
+    
+    if (quiz_category['id'] == 0):
+        questions = Question.query.all()
+       
+        
+    else:
+        getCategory =  Category.query.get(quiz_category['id'])
+        questions = Question.query.filter_by(category=str(getCategory.id)).all()
+        print(questions)
+        
+     
+    def check_if_question_is_display(question):
+      displayed_question = False
+      for q in previous_questions:
+        if (q == question.id):
+          displayed_question = True
+          return displayed_question
+
+    
+    get_random_question = questions[random.randrange(0, len(questions), 1)]
+     
+    while (check_if_question_is_display(get_random_question)):
+      question =questions[random.randrange(0, len(questions), 1)]
+       
+      if (len(questions) ==len(previous_questions)  ):
         return jsonify({
           'success': True
         })
 
-    # return the question
+    
     return jsonify({
       'success': True,
-      'question': question.format()
+      'question': get_random_question.format()
     })
   '''
   @TODO: 
