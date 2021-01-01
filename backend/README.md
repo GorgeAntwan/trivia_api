@@ -179,7 +179,7 @@ GET '/questions?page=1'
     ],
     "success": true,
     "total_questions": 15
-}
+ }
 
 ```````````````````
 DELETE '/questions/43'
