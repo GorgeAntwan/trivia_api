@@ -46,7 +46,7 @@ class TriviaTestCase(unittest.TestCase):
 
         # get response  and load responseData questions 
         response = self.client().get('/questions')
-        responseData = json.loads(response.responseData)
+        responseData = json.loads(response.data)
         #to check status code and message
         self.assertEqual(response.status_code,200)
         self.assertEqual(responseData['success'],True)
@@ -58,7 +58,7 @@ class TriviaTestCase(unittest.TestCase):
     def test_404_request_beyond_valid_page_get_all_question(self):
         """Tests question pagination failure 404 when get all question"""
         response = self.client().get('/questions?page=100')
-        responseData = json.loads(response.responseData)
+        responseData = json.loads(response.data)
         # check status code and message
         self.assertEqual(response.status_code, 404)
         self.assertEqual(responseData['success'], False)
@@ -78,20 +78,23 @@ class TriviaTestCase(unittest.TestCase):
 
         # delete the question and store response
         response = self.client().delete('/questions/{}'.format(new_question.id))
-        responseData = json.loads(response.responseData)
+        responseData = json.loads(response.data)
 
         # get number of questions after delete
         questions_after_delete = Question.query.all()
 
         # see if the question has been deleted
         question = Question.query.filter(Question.id == new_question.id).one_or_none()
-
+        print(question)
         # check status code and success message
         self.assertEqual(response.status_code, 200)
         self.assertEqual(responseData['success'], True)
 
+        #to sure the questoin is delete and when retrive is return none
+        self.assertIsNone(question)
+        
         # check if question id matches deleted id
-        self.assertEqual(responseData['deleted'], question.id)
+        self.assertEqual(responseData['deleted'], new_question.id)
 
         # check if one less question after delete
         self.assertTrue(len(questions_before_delete) - len(questions_after_delete) == 1)
@@ -104,7 +107,7 @@ class TriviaTestCase(unittest.TestCase):
         #get question before create new question to know the number of question
         questions_before_create_new_question =  Question.query.all()
         response = self.client().post('/questions',json = self.new_question)
-        responseData =json.loads(response.responseData)
+        responseData =json.loads(response.data)
 
         #get number of question after create new question
         questions_after_create_new_question=Question.query.all()
@@ -128,7 +131,7 @@ class TriviaTestCase(unittest.TestCase):
        
        #create new question with empty body and without answer ,question ,and outher informtion to create new question
        response = self.client().post('/questions',json={})
-       responseData = json.loads(response.responseData)
+       responseData = json.loads(response.data)
        questions_after_create = Question.query.all()
 
        # check status code and success message
@@ -142,7 +145,7 @@ class TriviaTestCase(unittest.TestCase):
         """Tests search questions success"""
 
         response = self.client().post('/searchQuestions',json={'searchTerm':'region'})
-        responseData =json.loads(response.responseData)
+        responseData =json.loads(response.data)
 
         # check response status code and message when search question
         self.assertEqual(response.status_code, 200)
@@ -152,7 +155,7 @@ class TriviaTestCase(unittest.TestCase):
         """Tests search questions failure 404"""
         # send post request with search term that should fail and search to question not found
         response = self.client().post('/searchQuestions',json={'searchTerm': 'qqqqqq'})
-        responseData = json.loads(response.responseData)
+        responseData = json.loads(response.data)
 
         # check response status code and message when not found any question
         self.assertEqual(response.status_code, 404)
@@ -162,7 +165,7 @@ class TriviaTestCase(unittest.TestCase):
         """Tests getting questions by category success"""
 
         response = self.client().get('/categories/2/questions')
-        responseData = json.loads(response.responseData)
+        responseData = json.loads(response.data)
 
         self.assertEqual(response.status_code,200)
         self.assertEqual(responseData['success'],True)
@@ -177,7 +180,7 @@ class TriviaTestCase(unittest.TestCase):
         """Tests getting questions by category failure 400"""
 
         response = self.client().get('/categories/100/questions')
-        responseData = json.loads(response.responseData)
+        responseData = json.loads(response.data)
 
         self.assertEqual(response.status_code,400)
         self.assertEqual(responseData['success'],False)
@@ -188,7 +191,7 @@ class TriviaTestCase(unittest.TestCase):
         """Tests playing quiz game success"""
         response = self.client().post('/quizzes', json={'previous_questions': [2, 6],
                    'quiz_category': {'type': 'Science', 'id': '1'}})
-        responseData = json.loads(response.responseData)
+        responseData = json.loads(response.data)
         
         #check response status and message when get next question 
         self.assertEqual(response.status_code,200)
@@ -206,7 +209,7 @@ class TriviaTestCase(unittest.TestCase):
 
         # send post request without json responseData to test that not work when not send any thing
         response = self.client().post('/quizzes', json={})
-        responseData = json.loads(response.responseData)
+        responseData = json.loads(response.data)
 
         # check response status code and message
         self.assertEqual(response.status_code, 400)
