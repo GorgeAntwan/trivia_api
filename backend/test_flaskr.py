@@ -41,7 +41,7 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
-    def test_get_paginated_questions(self):
+    def test_get_paginated_all_questions(self):
         """Tests question pagination success"""
 
         # get response and load responseData
@@ -72,28 +72,26 @@ class TriviaTestCase(unittest.TestCase):
                             category=self.new_question['category'], difficulty=self.new_question['difficulty'])
         question.insert()
 
-        # get the id of the new question
-        q_id = question.id
-
+         
         # get number of questions before delete
         questions_before = Question.query.all()
 
         # delete the question and store response
-        response = self.client().delete('/questions/{}'.format(q_id))
+        response = self.client().delete('/questions/{}'.format(question.id))
         responseData = json.loads(response.responseData)
 
         # get number of questions after delete
         questions_after = Question.query.all()
 
         # see if the question has been deleted
-        question = Question.query.filter(Question.id == q_id).one_or_none()
+        question = Question.query.filter(Question.id == question.id).one_or_none()
 
         # check status code and success message
         self.assertEqual(response.status_code, 200)
         self.assertEqual(responseData['success'], True)
 
         # check if question id matches deleted id
-        self.assertEqual(responseData['deleted'], q_id)
+        self.assertEqual(responseData['deleted'], question.id)
 
         # check if one less question after delete
         self.assertTrue(len(questions_before) - len(questions_after) == 1)
@@ -104,12 +102,12 @@ class TriviaTestCase(unittest.TestCase):
         """Tests question creation success"""
 
         #get question before create new question
-        questions_before =  Question.query.all()
+        questions_before_create_new_question =  Question.query.all()
         response = self.client().post('/questions',json = self.new_question)
         responseData =json.loads(response.responseData)
 
-        #get number of question after create
-        questions_after=Question.query.all()
+        #get number of question after create new question
+        questions_after_create_new_question=Question.query.all()
 
         #get question after create 
         question =Question.query.filter_by(id=responseData['created']).one_or_none()
@@ -119,7 +117,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(responseData['success'], True)
 
         # check if one more question after post
-        self.assertTrue(len(questions_after) - len(questions_before) == 1)
+        self.assertTrue(len(questions_after_create_new_question) - len(questions_before_create_new_question) == 1)
 
         # check that question is not None
         self.assertIsNotNone(question)
