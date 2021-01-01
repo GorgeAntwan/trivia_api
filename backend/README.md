@@ -72,9 +72,12 @@ This README is missing documentation of your endpoints. Below is an example for 
 
 Endpoints
 GET '/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/questions?page=1'
+POST '/questions'
+DELETE '/questions/1'
+POST '/searchQuestions'
+POST '/categories/<int:id>/questions'
+POST '/quizzes'
 
 GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
@@ -88,6 +91,359 @@ GET '/categories'
 '6' : "Sports"}
 
 ```
+GET '/questions?page=1'
+-Fetches all Questions and questions,
+  including pagination (every 10 questions). and return a list of questions,
+  number of total questions, current category, categories.
+  pairs.
+  {
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+    },
+    "questions": [
+        {
+            "answer": "Maya Angelou",
+            "category": "2",
+            "difficulty": 4,
+            "id": 1,
+            "question": "Whose autobiography is entitled I Know Why the Caged Bird Sings?"
+        },
+        {
+            "answer": "Muhammad Ali",
+            "category": "1",
+            "difficulty": 4,
+            "id": 2,
+            "question": "What boxers original name is Cassius Clay?"
+        },
+        {
+            "answer": "Apollo 13",
+            "category": "4",
+            "difficulty": 5,
+            "id": 3,
+            "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+        },
+        {
+            "answer": "Tom Cruise",
+            "category": "4",
+            "difficulty": 5,
+            "id": 4,
+            "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+        },
+        {
+            "answer": "Brazil",
+            "category": "3",
+            "difficulty": 6,
+            "id": 5,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Escher",
+            "category": "1",
+            "difficulty": 2,
+            "id": 6,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "Edward Scissorhands",
+            "category": "3",
+            "difficulty": 5,
+            "id": 7,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": "6",
+            "difficulty": 4,
+            "id": 8,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        },
+        {
+            "answer": "Escher",
+            "category": "5",
+            "difficulty": 4,
+            "id": 9,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "Jackson Pollock",
+            "category": "5",
+            "difficulty": 2,
+            "id": 10,
+            "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+        }
+    ],
+    "success": true,
+    "total_questions": 15
+}
+
+```````````````````
+DELETE '/questions/43'
+-to DELETE question using a question ID.
+and return deleted is id of question that delete
+and  questions isa list of question after delete question and total_questions is total number of question after delete 
+pairs.
+{
+    "deleted": 43,
+    "questions": [
+        {
+            "answer": "Maya Angelou",
+            "category": "2",
+            "difficulty": 4,
+            "id": 1,
+            "question": "Whose autobiography is entitled I Know Why the Caged Bird Sings?"
+        },
+        {
+            "answer": "Muhammad Ali",
+            "category": "1",
+            "difficulty": 4,
+            "id": 2,
+            "question": "What boxers original name is Cassius Clay?"
+        },
+        {
+            "answer": "Apollo 13",
+            "category": "4",
+            "difficulty": 5,
+            "id": 3,
+            "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+        },
+        {
+            "answer": "Tom Cruise",
+            "category": "4",
+            "difficulty": 5,
+            "id": 4,
+            "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+        },
+        {
+            "answer": "Brazil",
+            "category": "3",
+            "difficulty": 6,
+            "id": 5,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Escher",
+            "category": "1",
+            "difficulty": 2,
+            "id": 6,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "Edward Scissorhands",
+            "category": "3",
+            "difficulty": 5,
+            "id": 7,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": "6",
+            "difficulty": 4,
+            "id": 8,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        },
+        {
+            "answer": "Escher",
+            "category": "5",
+            "difficulty": 4,
+            "id": 9,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "Jackson Pollock",
+            "category": "5",
+            "difficulty": 2,
+            "id": 10,
+            "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+        }
+    ],
+    "success": true,
+    "total_questions": 14
+}
+`````````````````
+POST '/questions'
+- to Create a new question,
+  which will require the question and answer text,
+  category, and difficulty score.
+  to create question you must send this is json contain
+  ex:
+    {
+    "question":"new question",
+    "answer" :"answer question",
+    "category" :4,
+    "difficulty":4
+    }
+  and after success create new question return created is id of new question and questions is list of questions after create new question and total_questions is number of question after create new question 
+  pairs.
+  {
+    "created": 44,
+    "questions": [
+        {
+            "answer": "Maya Angelou",
+            "category": "2",
+            "difficulty": 4,
+            "id": 1,
+            "question": "Whose autobiography is entitled I Know Why the Caged Bird Sings?"
+        },
+        {
+            "answer": "Muhammad Ali",
+            "category": "1",
+            "difficulty": 4,
+            "id": 2,
+            "question": "What boxers original name is Cassius Clay?"
+        },
+        {
+            "answer": "Apollo 13",
+            "category": "4",
+            "difficulty": 5,
+            "id": 3,
+            "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+        },
+        {
+            "answer": "Tom Cruise",
+            "category": "4",
+            "difficulty": 5,
+            "id": 4,
+            "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+        },
+        {
+            "answer": "Brazil",
+            "category": "3",
+            "difficulty": 6,
+            "id": 5,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Escher",
+            "category": "1",
+            "difficulty": 2,
+            "id": 6,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "Edward Scissorhands",
+            "category": "3",
+            "difficulty": 5,
+            "id": 7,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": "6",
+            "difficulty": 4,
+            "id": 8,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        },
+        {
+            "answer": "Escher",
+            "category": "5",
+            "difficulty": 4,
+            "id": 9,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "Jackson Pollock",
+            "category": "5",
+            "difficulty": 2,
+            "id": 10,
+            "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+        }
+    ],
+    "success": true,
+    "total_questions": 15
+}
+
+`````
+POST '/searchQuestions' 
+  {"searchTerm" : "fantasy" }
+- to get questions based on a search term.
+  It should return any questions for whom the search term is a substring of the question.
+  pares.
+  {
+    "questions": [
+        {
+            "answer": "Edward Scissorhands",
+            "category": "3",
+            "difficulty": 5,
+            "id": 7,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        }
+    ],
+    "success": true,
+    "total_questions": 15
+}
+
+```````
+POST '/categories/1/questions'
+-  to get questions based on category. 
+   by category id and return questions
+   and total_questions is total number of question in this is category.
+   pares.
+   {
+    "current_category": "Science",
+    "questions": [
+        {
+            "answer": "Muhammad Ali",
+            "category": "1",
+            "difficulty": 4,
+            "id": 2,
+            "question": "What boxers original name is Cassius Clay?"
+        },
+        {
+            "answer": "Escher",
+            "category": "1",
+            "difficulty": 2,
+            "id": 6,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "by training",
+            "category": "1",
+            "difficulty": 1,
+            "id": 13,
+            "question": "how can play"
+        },
+        {
+            "answer": "by study",
+            "category": "1",
+            "difficulty": 1,
+            "id": 16,
+            "question": "how can learn"
+        }
+    ],
+    "success": true,
+    "total_questions": 15
+}
+
+````````````
+POST '/quizzes'
+  {
+    "previous_questions" : "fantasy ?",
+    "quiz_category": {"id":"1",type":"Science"}
+  }
+- to get questions to play the quiz. 
+  This endpoint should take category and previous question parameters and return a random questions within the given category,if provided, and that is not one of the previous questions. 
+  pares.
+  {
+    "question": {
+        "answer": "Escher",
+        "category": "1",
+        "difficulty": 2,
+        "id": 6,
+        "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+    },
+    "success": true
+}
+
+  
+
+
+
+
 
 
 ## Testing
