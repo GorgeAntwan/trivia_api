@@ -92,7 +92,7 @@ GET '/categories'
 
 ````````````````````
 GET '/questions?page=1'
--Fetches all Questions and questions,
+ -Fetches all Questions and questions,
   including pagination (every 10 questions). and return a list of questions,
   number of total questions, current category, categories.
   pairs.
@@ -266,7 +266,7 @@ pairs.
 }
 `````````````````
 POST '/questions'
-- to Create a new question,
+ - to Create a new question,
   which will require the question and answer text,
   category, and difficulty score.
   to create question you must send this is json contain
