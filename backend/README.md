@@ -90,7 +90,7 @@ GET '/categories'
 '5' : "Entertainment",
 '6' : "Sports"}
 
-````````````````````
+`````````
 GET '/questions?page=1'
  -Fetches all Questions and questions,
   including pagination (every 10 questions). and return a list of questions,
