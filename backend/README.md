@@ -92,11 +92,11 @@ GET '/categories'
 
 `````````
 GET '/questions?page=1'
-- Fetches all Questions and questions,
-  including pagination (every 10 questions). and return a list of questions,
-  number of total questions, current category, categories.
-  pairs.
-  {
+-Fetches all Questions and questions,
+including pagination (every 10 questions). and return a list of questions,
+number of total questions, current category, categories.
+pairs.
+{
     "categories": {
         "1": "Science",
         "2": "Art",
@@ -179,7 +179,7 @@ GET '/questions?page=1'
     ],
     "success": true,
     "total_questions": 15
- }
+}
 
 ```````````````````
 DELETE '/questions/43'

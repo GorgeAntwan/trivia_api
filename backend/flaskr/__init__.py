@@ -40,7 +40,7 @@ def get_final_random_question(questions,previous_questions):
       get_random_question = questions[random_index]
       
       while ( check_if_question_is_display(get_random_question,previous_questions)):
-       
+      
        random_index= random.randrange(0, total_question, 1)
        get_random_question = questions[random_index]
        
@@ -276,20 +276,18 @@ def create_app(test_config=None):
   
     if ((previous_questions is None) or ( quiz_category is None)):
          abort(400)
-   
-    if (quiz_category['id'] == 0):
+    category_id = quiz_category['id']
+    if (category_id == 0):
         questions = Question.query.all()
        
         
     else:
-        category_id = quiz_category['id']
+       
         getCategory =  Category.query.get(category_id)
         if getCategory is None:
          abort(404)
         questions = Question.query.filter_by(category=str(getCategory.id)).all()
     
-  
-
     final_question = get_final_random_question(questions,previous_questions)
     if(final_question==""):
        
