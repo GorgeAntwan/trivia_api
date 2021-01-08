@@ -441,6 +441,7 @@ POST '/quizzes'
 
 ## Testing
 To run the tests, run
+ python test_flaskr.py 
 ```
 dropdb trivia_test
 createdb trivia_test
