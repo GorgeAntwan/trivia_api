@@ -105,7 +105,7 @@ def create_app(test_config=None):
   @app.route('/questions')
   def get_questions():
 
-    all_questions = Question.query.order_by(Question.id).all()
+    all_questions = Question.query.all()
     sub_questions = paginate_questions(request, all_questions)
      
     if (len(sub_questions) == 0):
@@ -214,10 +214,10 @@ def create_app(test_config=None):
       if (len(selection_search) == 0):
           abort(404)
      
-      paginated = paginate_questions(request, selection_search)
+      questions = paginate_questions(request, selection_search)
       return jsonify({
         'success': True,
-        'questions': paginated,
+        'questions': questions,
         'total_questions': len(Question.query.all())
       })   
     else:
@@ -276,18 +276,20 @@ def create_app(test_config=None):
   
     if ((previous_questions is None) or ( quiz_category is None)):
          abort(400)
+
     category_id = quiz_category['id']
-    if (category_id == 0):
+    getCategory =  Category.query.get(category_id)
+
+    if getCategory is None:
         questions = Question.query.all()
-       
-        
-    else:
-       
-        getCategory =  Category.query.get(category_id)
-        if getCategory is None:
-         abort(404)
-        questions = Question.query.filter_by(category=str(getCategory.id)).all()
+      
     
+    else:
+      questions =[]
+      for q in Question.query.all():
+        if(q.category==str(getCategory.id)):
+           questions.append(q)
+
     final_question = get_final_random_question(questions,previous_questions)
     if(final_question==""):
        

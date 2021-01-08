@@ -14,10 +14,19 @@
     font-size: 34px;
     font-weight: bold;
 }
-
+.play-category {
+     
+    
+    padding:5px
+    
+}
 .play-category:hover {
     color: dodgerblue;
+    cursor: pointer;
+    padding:10px
+    
 }
+
 
 .button {
     width: 100px;
@@ -26,11 +35,13 @@
     color: white;
     padding: 3px 5px;
     align-self: center;
+    cursor:pointer;
 }
 
 div.button {
     margin-top: 20px;
     margin-left: calc(50% - 50px);
+    cursor:pointer;
 }
 
 .quiz-question {
